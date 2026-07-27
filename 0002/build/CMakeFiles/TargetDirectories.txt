@@ -1,0 +1,3 @@
+D:/Code/c++ learn/0002/build/CMakeFiles/0002.dir
+D:/Code/c++ learn/0002/build/CMakeFiles/edit_cache.dir
+D:/Code/c++ learn/0002/build/CMakeFiles/rebuild_cache.dir
