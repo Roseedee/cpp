@@ -63,24 +63,43 @@ String& String::operator=(const char* s) {
     return *this;
 }
 
-String& String::operator+(const char* source) {
+String String::operator+(const char* source) const {
+    if(source == nullptr) return String();
+    String temp(source);
+    return temp;
+}
+
+String String::operator+(const String& other) const {
+    String temp(*this);
+    temp += other;
+    return temp;
+}
+
+String String::operator+(const int n) const {
+    char* temp_n = nullptr;
+    String temp_str(*this);
+    intToString(temp_n, n);
+    temp_str += String(temp_n);
+    delete[] temp_n;
+    return temp_str;
+}
+
+String& String::operator+=(const char* source) {
     if(source == nullptr) return *this = nullptr;
     append(data, source);
     return *this;
 }
 
-String& String::operator+(const String& other) {
+String& String::operator+=(const String& other) {
     append(data, other.data);
     return *this;
 }
 
-String& String::operator+=(const char* source) {
-    if(source == nullptr) return *this = nullptr;
-    return *this + String(source);
-}
-
-String& String::operator+=(const String& other) {
-    return *this + other;
+String& String::operator+=(const int n) {
+    char* temp_n = nullptr;
+    intToString(temp_n, n);
+    append(data, temp_n);
+    return *this;
 }
 
 bool String::operator==(const String& other) const {

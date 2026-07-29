@@ -82,6 +82,43 @@ class String {
             return cstrEquals(data, source);
         }
 
+        static size_t intLenDigit(long long int n) {
+            int i = 1;
+            while((n /= 10) != 0) i++;
+            return i;
+        }
+
+        static bool isIntNegative(int n) {
+            return n < 0;
+        }
+
+        static void intToString(char*& target, int n) {
+            bool isNegative = isIntNegative(n);
+            long long int _n = n;
+            if(_n < 0) _n = -_n;
+            int lenDigit = intLenDigit(_n);
+
+            char* _temp = new char[lenDigit + 1 + isNegative];
+
+            int pos = lenDigit - 1 + isNegative;
+            if(isNegative) _temp[0] = '-';
+
+            do{
+                // std::cout << "index : " << pos << " : value : " << _n << std::endl;
+                _temp[pos] = (_n % 10) + '0';
+                _n /= 10;
+                pos--;
+            }while(_n != 0);
+
+            _temp[lenDigit + isNegative] = '\0';
+
+            if(target != nullptr) delete[] target;
+
+            // std::cout << _temp << std::endl;
+
+            target = _temp;
+        }
+
     public:
         String();
 
@@ -95,36 +132,40 @@ class String {
 
         String& operator=(const char*);
 
-        const char* ptr() const;
+        String operator+(const char*) const;
 
-        bool operator==(const String&) const;
-
-        bool operator==(const char*) const;
-
-        bool operator!=(const String&) const;
-
-        bool operator!=(const char*) const;
-
-        String& operator+(const char*);
-
-        String& operator+(const String&);
-
+        String operator+(const String&) const;
+        
+        String operator+(const int) const;
 
         String& operator+=(const char*);
 
         String& operator+=(const String&);
 
+        String& operator+=(const int);
+        
+        bool operator==(const String&) const;
+        
+        bool operator==(const char*) const;
+        
+        bool operator!=(const String&) const;
+        
+        bool operator!=(const char*) const;
+        
+        
         char& operator[](int);
         
         const char& operator[](int) const;
-
+        
         int length() const {
             return len;
         }
-
+        
         bool isEmpty() const {
             return len == 0;
         }
+        
+        const char* ptr() const;
 
         bool isNotEmpty() const {
             return len > 0;
@@ -143,4 +184,16 @@ class String {
         static bool equals(const char* s1, const char* s2) {
             return cstrEquals(s1, s2);
         }
+
+        static String toString(const int n, const String& s) {
+            char* temp_n = nullptr;
+            intToString(temp_n, n);
+            String temp_str(temp_n);
+            temp_str += s;
+
+            // std::cout << temp_str << std::endl;
+
+            delete[] temp_n;
+            return temp_str;
+        } 
 };
