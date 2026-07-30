@@ -4,5 +4,6 @@ project(test)
 
 add_executable(test
     main.cpp
-    String.cpp
+    string/String.cpp
+    string/string_internal.cpp
 )

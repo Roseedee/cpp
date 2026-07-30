@@ -42,7 +42,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = C:\msys64\ucrt64\bin\cmake.exe --regenerate-during-build -S"D:\Code\c++ learn\test2" -B"D:\Code\c++ learn\test2\build"
+  command = C:\msys64\ucrt64\bin\cmake.exe --regenerate-during-build -SD:\Code\cpp\test2 -BD:\Code\cpp\test2\build
   description = Re-running CMake...
   generator = 1
 

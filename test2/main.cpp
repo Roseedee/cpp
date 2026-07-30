@@ -2,86 +2,105 @@
 
 using namespace std;
 
-size_t intDigit(long long int value) {
+int pow(int base, int pow) {
+    int temp = base;
     int i = 1;
-    while((value /= 10) != 0) {
+    while(i < pow) {
+        temp *= base;
         i++;
     }
-    return i;
+    return temp;
 }
 
-bool isNegative(int value) {
-    return value < 0;
+int truncateToInt(float f) {
+    return static_cast<int>(f);
 }
 
-void intToString(char*& target, int value) {
-    bool isnegative = isNegative(value);
-    long long int _value = value;
-    if(_value < 0) _value = -_value;
-    int digit = intDigit(_value);
+bool isNegative(float f) {
+    return f < 0.0;
+}
 
-    char* _temp = new char[digit + 1 + isnegative];
+bool isNegative(int n) {
+    return n < 0;
+}
 
-    int pos = digit - 1 + isnegative;
-    if(isnegative) _temp[0] = '-';
+int fractionalPart(float f) {
+    int n = truncateToInt(f);
+    f -= n;
+    f *= 1000000;
+    if(f < 0.0) f = -f;
+    int fp = static_cast<int>(f);
+    cout << "frac number(function) : " << fp << endl;
+    int fparr[6] = {0, 0, 0, 0, 0, 0};
+    int pos = 0;
     do {
-        // cout << "index : " << pos << " value : " << _value << endl;
-        _temp[pos] = (_value % 10) + '0';
-        _value /= 10;
-        pos--;
-    }while(_value != 0);
+        int temp = fp % 10;
+        // cout << "pos : " << pos << " value : " << fp << endl;
+        fp /= 10;
+        if(temp) {
+            fparr[pos] = temp;
+            pos++;
+        }else {
+            continue;
+        }
+    }while(fp != 0);
+    for(int i = 0; i < 6; i++) {
+        cout << fparr[i] << ", ";
+    }
+    cout << endl;
 
-    _temp[digit + isnegative] = '\0';
+    int frac_n;
+    // for(int i = pos; i > 0; i--) {
+    //     cout << "index : " << i << " value : " << fparr[i] << endl;
+    //     frac_n = fparr[i] * pow(10, i);
+    // }
+    return frac_n;
+}
 
-    // cout << "temp data in function : " << _temp << endl;
+size_t intDigit(int n) {
+    int digit = 0;
+    do {
+        n /= 10;
+        digit++;
+    }while((n % 10) != 0);
+    return digit;
+}
 
-    if(target != nullptr) delete[] target;
-    target = _temp;
+// size_t fractionalPartDigit(int n) {
+//     for(int i = 6; i > 0; i--) {
+
+//     }
+// } 
+
+void floatToString(char*& target, float f) {
+    cout << "--------------------------" << endl;
+    target = new char[4];
+    target = (char*)"End\0";
+    int n = truncateToInt(f);
+    bool negative = isNegative(n);
+    int nlen = intDigit(n);
+    int fp = fractionalPart(f);
+    
+    
+    cout << "Value : " << n << endl;
+    cout << "digit : " << nlen << endl;
+    cout << "frac : " << fp << endl;
 }
 
 int main() {
+    char* data = nullptr;
 
-    cout << "Hello" << endl;
-    // cout << toChar(10) << endl;
-    
-    // int n = 1234567;
+    floatToString(data, 0.2124);
+    floatToString(data, -1.254);
+    floatToString(data, -21.245);
+    floatToString(data, 321.244);
+    floatToString(data, 1.2557);
 
-    // int temparr[10];
-    // // int tempn = 0;
-    // int i = 0;
-    // do{
-    //     temparr[i] = n % 10;
-    //     n = n / 10;
-    //     i++;
-    // }while(n != 0);
-    
-    // char *c = new char[i + 1];
-    
-    // int a = 0;
-    // for(int j = i - 1; j >= 0; j--) {
-    //     c[a] = temparr[j] + '0';
-    //     a++;
-    // }
-    
-    // cout << c;
+    cout << data << endl;
+    cout << pow(10, 2) << endl;
+    cout << pow(2, 8) << endl;
+    cout << pow(2, 16) << endl;
 
-    char* c = nullptr;
-
-    intToString(c, 100);
-    cout << c << endl;
-    intToString(c, 1234);
-    cout << c << endl;
-    intToString(c, 0);
-    cout << c << endl;
-    intToString(c, 1);
-    cout << c << endl;
-    intToString(c, -2147483648);
-    cout << c << endl;
-
-    cout << "is negative : " << isNegative(2147483648) << endl;
-
-    int n2 = 2147483647;
-
-    cout << n2;
+    delete[] data;
     return 0;
 }

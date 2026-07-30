@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "String.h"
+#include "string/String.h"
 
 using namespace std;
 
@@ -104,7 +104,12 @@ int main() {
     s2 += -100 + s1 + 100 + s1 + 10 + 40;
     std::cout << "Data : " << s5 << std::endl;
     std::cout << "Data : " << (-100 + s1) << std::endl;
+    std::cout << "Data : " << (void*)s1.ptr() << std::endl;
     std::cout << "Data : " << s2 << std::endl;
+    String sf("float");
+    sf = s1 + 1.2;
+    std::cout << "Data : " << sf << std::endl;
+    
     
     // std::cout << "<---------------Operator Test--------------->" << std::endl;
     

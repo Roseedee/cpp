@@ -84,6 +84,10 @@ String String::operator+(const int n) const {
     return temp_str;
 }
 
+String String::operator+(const float f) const {
+
+}
+
 String& String::operator+=(const char* source) {
     if(source == nullptr) return *this = nullptr;
     append(data, source);
