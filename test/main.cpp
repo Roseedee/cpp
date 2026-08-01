@@ -30,6 +30,14 @@ class Student {
             age = age_validate(_age);
             gpa = gpa_validate(_gpa);
         }
+
+        Student(const Student& other) {
+            id = other.id;
+            name = other.name;
+            age = other.age;
+            gpa = other.gpa;
+        }
+        
         void print() {
             std::cout << "<---------- Student ---------->" << std::endl;
             // std::cout << "ID : " << id << std::endl;
@@ -107,7 +115,6 @@ int main() {
     std::cout << "Data : " << (void*)s1.ptr() << std::endl;
     std::cout << "Data : " << s2 << std::endl;
     String sf("float");
-    sf = s1 + 1.2;
     std::cout << "Data : " << sf << std::endl;
     
     

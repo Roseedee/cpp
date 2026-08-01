@@ -31,7 +31,7 @@ class String {
 
         static void intToString(char*&, int);
 
-        static void floatToString(char*&, float);
+        // static void floatToString(char*&, float);
 
     public:
         String();
@@ -52,7 +52,7 @@ class String {
         
         String operator+(const int) const;
 
-        String operator+(const float) const;
+        // String operator+(const float) const;
 
         String& operator+=(const char*);
 

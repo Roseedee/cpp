@@ -106,6 +106,6 @@ void String::intToString(char*& target, int n) {
     target = _temp;
 }
 
-void String::floatToString(char*& target, float f) {
+// void String::floatToString(char*& target, float f) {
     
-}
+// }

@@ -1,9 +1,0 @@
-# ninja log v7
-2	401	8071317144626263	CMakeFiles/test.dir/main.cpp.obj	cb37cac0a342b6fc
-9	438	8071317144701437	CMakeFiles/test.dir/string/String.cpp.obj	e36410864f167633
-14	440	8071317144746514	CMakeFiles/test.dir/string/string_internal.cpp.obj	d1b9d2a02bdc6ecd
-440	560	8071317149003414	test.exe	85fd17ea014dc63f
-3	396	8071317568209360	CMakeFiles/test.dir/string/String.cpp.obj	e36410864f167633
-397	522	8071317572141603	test.exe	85fd17ea014dc63f
-15	416	8071321888860564	CMakeFiles/test.dir/string/string_internal.cpp.obj	d1b9d2a02bdc6ecd
-10	434	8071321888825438	CMakeFiles/test.dir/string/String.cpp.obj	e36410864f167633
