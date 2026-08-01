@@ -30,6 +30,8 @@ int fractionalPart(float f) {
     f *= 1000000;
     if(f < 0.0) f = -f;
     int fp = static_cast<int>(f);
+    cout << "truncate f number(function) : " << f << endl;
+    cout << "truncate number(function) : " << n << endl;
     cout << "frac number(function) : " << fp << endl;
     int fparr[6] = {0, 0, 0, 0, 0, 0};
     int pos = 0;

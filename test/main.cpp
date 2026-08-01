@@ -1,6 +1,7 @@
 #include <iostream>
-
+#include <variant>
 #include "string/String.h"
+
 
 using namespace std;
 
@@ -19,6 +20,77 @@ class Student {
     }
 
     public:
+
+        class MemberProxy {
+            Student& st;
+            String key;
+
+            public:
+                MemberProxy(Student& st, const String& key): st(st), key(key) {}
+
+                void operator=(const String& val) {
+                    if(key == "id") st.id = val;
+                    else if(key == "name") st.name = val;
+                    else throw std::out_of_range("Key type mismatch or invalid key");
+                }
+
+                operator String() {
+                    if(key == "id") return st.id;
+                    else if(key == "name") return st.name;
+                    else throw std::out_of_range("Key type mismatch or invalid key");
+                }
+
+                void operator=(size_t val) {
+                    if(key == "age") st.age = st.age_validate(val);
+                    else throw std::out_of_range("Key type mismatch or invalid key");
+                }
+
+                void operator=(int val) {
+                    if(key == "age") {
+                        st.age = st.age_validate(static_cast<size_t>(val));
+                    }else throw std::out_of_range("Key type mismatch or invalid key");
+                }
+
+                operator size_t() {
+                    if(key == "age") return st.age;
+                    else throw std::out_of_range("Key type mismatch or invalid key");
+                }
+
+                operator int() {
+                    if(key == "age") return static_cast<int>(st.age);
+                    else throw std::out_of_range("Key type mismatch or invalid key");
+                }
+
+                void operator=(float val) {
+                    if(key == "gpa") st.gpa = st.gpa_validate(val);
+                    else throw std::out_of_range("Key type mismatch or invalid key");
+                }
+
+                void operator=(double val) {
+                    if(key == "gpa") {
+                        st.gpa = st.gpa_validate(static_cast<float>(val));
+                    }else throw std::out_of_range("Key type mismatch or invalid key");
+                }
+
+                operator float() {
+                    if(key == "gpa") return st.gpa;
+                    else throw std::out_of_range("Key type mismatch or invalid key");
+                }
+
+                operator double() {
+                    if(key == "gpa") return static_cast<double>(st.gpa);
+                    else throw std::out_of_range("Key type mismatch or invalid key");
+                }
+
+                operator std::variant<String , size_t, float>() const { 
+                    if(key == "id") return st.id;
+                    if(key == "name") return st.name;
+                    if(key == "age") return st.age;
+                    if(key == "gpa") return st.gpa;
+                    throw std::out_of_range("No matching key found.");
+                }
+        };
+
         Student() {
             id = "";
             name = "";
@@ -37,22 +109,55 @@ class Student {
             age = other.age;
             gpa = other.gpa;
         }
+
+        Student& operator=(const Student& other) {
+
+            id = other.id;
+            name = other.name;
+            age = other.age;
+            gpa = other.gpa;
+
+            return *this;
+        }
+
+        bool operator==(const Student& other) const {
+            if(id != other.id) return false;
+            if(name != other.name) return false;
+            if(age != other.age) return false;
+            if(gpa != other.gpa) return false;
+            return true;
+        }
+
+        bool operator!=(const Student& other) const {
+            return !(*this == other);
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const Student::MemberProxy& proxy) {
+            std::variant<String, size_t, float> v = proxy;
+            
+            if (std::holds_alternative<String>(v)) {
+                os << std::get<String>(v);
+            } else if (std::holds_alternative<size_t>(v)) {
+                os << std::get<size_t>(v);
+            } else if (std::holds_alternative<float>(v)) {
+                os << std::get<float>(v);
+            }
+            return os;
+        }
+
+        MemberProxy operator[](const String& key) {
+            if(key != "id" && key != "name" && key != "age" && key != "gpa") {
+                throw std::out_of_range("No matching key found.");
+            }
+            return MemberProxy(*this, key);
+        }
         
         void print() {
             std::cout << "<---------- Student ---------->" << std::endl;
-            // std::cout << "ID : " << id << std::endl;
-            // std::cout << "Name : " << name << std::endl;
-            // std::cout << "Age : " << age << std::endl;
-            // std::cout << "GPA : " << gpa << std::endl;
-            String temp("");
-            String s1("Roseedee");
-            String s2("12");
-            int i = 123;
-
-            // temp = s1 + 10;
-            std::cout << temp << std::endl;
-            std::cout << s1 << std::endl;
-
+            std::cout << "ID : " << id << std::endl;
+            std::cout << "Name : " << name << std::endl;
+            std::cout << "Age : " << age << std::endl;
+            std::cout << "GPA : " << gpa << std::endl;
         } 
 };
 
@@ -69,53 +174,53 @@ String operator+(const int n, const String& s) {
 }
 
 int main() {
-    String s1("Roseedee");
-    String s2("Muhammad");
-    String s31 = s1;
-    String s4("A");
-    String s5("B");
+    // String s1("Roseedee");
+    // String s2("Muhammad");
+    // String s31 = s1;
+    // String s4("A");
+    // String s5("B");
 
-    s4 += s5;
+    // s4 += s5;
 
-    if(s1.isEmpty()) {
-        std::cout << "String is empty" << std::endl;
-    }
+    // if(s1.isEmpty()) {
+    //     std::cout << "String is empty" << std::endl;
+    // }
 
-    if(s1.isNotEmpty()) {
-        std::cout << "String is not empty" << std::endl;
-    }
+    // if(s1.isNotEmpty()) {
+    //     std::cout << "String is not empty" << std::endl;
+    // }
 
-    std::cout << "<---------------Memory Address Test--------------->" << std::endl;
+    // std::cout << "<---------------Memory Address Test--------------->" << std::endl;
     
-    std::cout << "Data : " << s1 << std::endl;
-    std::cout << "Address : " << (void*)s1.ptr() << std::endl;
-    std::cout << "Data : " << s2 << std::endl;
-    std::cout << "Address : " << (void*)s2.ptr() << std::endl;
-    std::cout << "Data : " << s31 << std::endl;
-    std::cout << "Address : " << (void*)s31.ptr() << std::endl;
-    std::cout << "Data : " << s4 << std::endl;
-    std::cout << "Address : " << (void*)s4.ptr() << std::endl;
-    std::cout << "Data : " << s5 << std::endl;
-    std::cout << "Address : " << (void*)s5.ptr() << std::endl;
-    //s5 after s5 += nullptr
-    s5 += nullptr;
-    std::cout << "Data : " << s5 << std::endl;
-    std::cout << "Address : " << (void*)s5.ptr() << std::endl;
-    //s5 after s5 += "string"
-    s5 += "str";
-    s5 += "ing";
-    s5 += s4;
-    s5 += s1 + s2;
-    s5 += s1 + "end";
-    s2 += s1 + s1;
-    s2 += 100;
-    s2 += -100 + s1 + 100 + s1 + 10 + 40;
-    std::cout << "Data : " << s5 << std::endl;
-    std::cout << "Data : " << (-100 + s1) << std::endl;
-    std::cout << "Data : " << (void*)s1.ptr() << std::endl;
-    std::cout << "Data : " << s2 << std::endl;
-    String sf("float");
-    std::cout << "Data : " << sf << std::endl;
+    // std::cout << "Data : " << s1 << std::endl;
+    // std::cout << "Address : " << (void*)s1.ptr() << std::endl;
+    // std::cout << "Data : " << s2 << std::endl;
+    // std::cout << "Address : " << (void*)s2.ptr() << std::endl;
+    // std::cout << "Data : " << s31 << std::endl;
+    // std::cout << "Address : " << (void*)s31.ptr() << std::endl;
+    // std::cout << "Data : " << s4 << std::endl;
+    // std::cout << "Address : " << (void*)s4.ptr() << std::endl;
+    // std::cout << "Data : " << s5 << std::endl;
+    // std::cout << "Address : " << (void*)s5.ptr() << std::endl;
+    // //s5 after s5 += nullptr
+    // s5 += nullptr;
+    // std::cout << "Data : " << s5 << std::endl;
+    // std::cout << "Address : " << (void*)s5.ptr() << std::endl;
+    // //s5 after s5 += "String"
+    // s5 += "str";
+    // s5 += "ing";
+    // s5 += s4;
+    // s5 += s1 + s2;
+    // s5 += s1 + "end";
+    // s2 += s1 + s1;
+    // s2 += 100;
+    // s2 += -100 + s1 + 100 + s1 + 10 + 40;
+    // std::cout << "Data : " << s5 << std::endl;
+    // std::cout << "Data : " << (-100 + s1) << std::endl;
+    // std::cout << "Data : " << (void*)s1.ptr() << std::endl;
+    // std::cout << "Data : " << s2 << std::endl;
+    // String sf("float");
+    // std::cout << "Data : " << sf << std::endl;
     
     
     // std::cout << "<---------------Operator Test--------------->" << std::endl;
@@ -131,10 +236,54 @@ int main() {
     // std::cout << s31 << std::endl;
     // std::cout << s1[s1.length() - 1] << std::endl;
     
-    // std::cout << "<---------------Student Test--------------->" << std::endl;
+    std::cout << "<---------------Student Test--------------->" << std::endl;
     
-    // Student st("120", "Roseedee", 15, 4.0);
+    Student st1("120", "Roseedee", 15, 4.0);
+    Student st2("001", "Muhammad", 18, 3.1);
+    Student st3("002", "Furkhon", 20, 2.2);
 
-    // st.print();
+    st1.print();
+
+    st1 = st2;
+
+    st2 = st3;
+
+    st1.print();
+    st2.print();
+
+    Student stp1("00", "one", 15, 2.0);
+    Student stp2("001", "one", 15, 2.0);
+
+    if(stp1 == stp2) std::cout << "stp1 == stp2" << std::endl;
+
+    st1["id"] = "000";
+    st1["name"] = "Uninitialize";
+    st1["age"] = 25;
+    st1["gpa"] = 3.2;
+
+    st3["name"] = "Ismaael";
+
+    st1.print();
+    st3.print();
+
+    std::cout << std::endl;
+    
+    String st2_id = st2["id"];
+    String st2_name = st2["name"];
+    int st2_age = st2["age"];
+    double st2_gpa = st2["gpa"];
+    
+    std::cout << "st1 id is : " << st1["id"] << std::endl;
+    std::cout << "st1 name is : " << st1["name"] << std::endl;
+    std::cout << "st1 age is : " << st1["age"] << std::endl;
+    std::cout << "st1 gpa is : " << st1["gpa"] << std::endl;
+    
+    std::cout << std::endl;
+
+    std::cout << "st1 id is : " << st2_id << std::endl;
+    std::cout << "st1 name is : " << st2_name << std::endl;
+    std::cout << "st1 age is : " << st2_age << std::endl;
+    std::cout << "st1 gpa is : " << st2_gpa << std::endl;
+
     return 0;
 }
