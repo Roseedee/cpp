@@ -3,7 +3,7 @@
 #include "string/String.h"
 
 
-using namespace std;
+// using namespace std;
 
 class Student {
     String id;
@@ -111,7 +111,6 @@ class Student {
         }
 
         Student& operator=(const Student& other) {
-
             id = other.id;
             name = other.name;
             age = other.age;
@@ -153,16 +152,83 @@ class Student {
         }
         
         void print() {
-            std::cout << "<---------- Student ---------->" << std::endl;
+            std::cout << "------------------------------" << std::endl;
             std::cout << "ID : " << id << std::endl;
             std::cout << "Name : " << name << std::endl;
             std::cout << "Age : " << age << std::endl;
             std::cout << "GPA : " << gpa << std::endl;
+            std::cout << "------------------------------" << std::endl;
         } 
 };
 
-class List {
+class StudentList {
+    Student* students;
+    size_t cap;
+    size_t current_pos;
+    public:
+        StudentList(size_t _cap) : cap(_cap) {
+            students = new Student[cap];
+            current_pos = 0;
+        }
 
+        Student& operator[](int index) {
+            if(index > current_pos) throw std::out_of_range("index is over size");
+            return students[index];
+        }
+
+        const Student& operator[](int index) const {
+            if(index > current_pos) throw std::out_of_range("index is over size");
+            return students[index];
+        }
+        
+        void add(const Student& student) {
+            students[current_pos] = student;
+            current_pos++;
+        }
+
+        void remove(size_t index) {
+            if(index > current_pos) throw std::out_of_range("index is over size");
+
+            if(index == current_pos - 1) {
+                students[index] = Student();
+            }else { // index >= 0 && index < current_pos
+                for(int i = index; i + 1 < current_pos; i++) {
+                    students[i] = students[i + 1];
+                }
+                students[current_pos - 1] = Student();
+            }
+
+            current_pos--;
+        }
+
+        void clear() {
+            for(int i = 0; i < current_pos; i++) {
+                students[i] = Student();
+            }
+            current_pos = 0;
+        }
+
+        size_t capacity() const {
+            return cap;
+        }
+
+        size_t size() const {
+            return current_pos;
+        }
+
+        void print() {
+            std::cout << "<====== All student list ======>" << std::endl;
+            for(int i = 0; i < cap; i++) {
+                // std::cout << i + 1 << ". " << students[i]["id"] << " : " << students[i]["name"] << " : "<< students[i]["age"] << " : " << students[i]["gpa"] << std::endl;
+                std::cout << i + 1 << " (" << &students[i] << ") ------------" << std::endl;
+                students[i].print();
+            }
+            std::cout << "<---------- List end ---------->" << std::endl;
+        }
+
+        ~StudentList() {
+            if(students != nullptr) delete[] students;
+        }
 };
 
 bool operator==(const char* s1, const String& s2) {
@@ -236,54 +302,70 @@ int main() {
     // std::cout << s31 << std::endl;
     // std::cout << s1[s1.length() - 1] << std::endl;
     
-    std::cout << "<---------------Student Test--------------->" << std::endl;
+    // std::cout << "<---------------Student Test--------------->" << std::endl;
     
-    Student st1("120", "Roseedee", 15, 4.0);
-    Student st2("001", "Muhammad", 18, 3.1);
-    Student st3("002", "Furkhon", 20, 2.2);
+    // Student st1("120", "Roseedee", 15, 4.0);
+    // Student st2("001", "Muhammad", 18, 3.1);
+    // Student st3("002", "Furkhon", 20, 2.2);
 
-    st1.print();
+    // st1.print();
 
-    st1 = st2;
+    // st1 = st2;
 
-    st2 = st3;
+    // st2 = st3;
 
-    st1.print();
-    st2.print();
+    // st1.print();
+    // st2.print();
 
-    Student stp1("00", "one", 15, 2.0);
-    Student stp2("001", "one", 15, 2.0);
+    // Student stp1("00", "one", 15, 2.0);
+    // Student stp2("001", "one", 15, 2.0);
 
-    if(stp1 == stp2) std::cout << "stp1 == stp2" << std::endl;
+    // if(stp1 == stp2) std::cout << "stp1 == stp2" << std::endl;
 
-    st1["id"] = "000";
-    st1["name"] = "Uninitialize";
-    st1["age"] = 25;
-    st1["gpa"] = 3.2;
+    // st1["id"] = "000";
+    // st1["name"] = "Uninitialize";
+    // st1["age"] = 25;
+    // st1["gpa"] = 3.2;
 
-    st3["name"] = "Ismaael";
+    // st3["name"] = "Ismaael";
 
-    st1.print();
-    st3.print();
+    // st1.print();
+    // st3.print();
 
-    std::cout << std::endl;
+    // std::cout << std::endl;
     
-    String st2_id = st2["id"];
-    String st2_name = st2["name"];
-    int st2_age = st2["age"];
-    double st2_gpa = st2["gpa"];
+    // String st2_id = st2["id"];
+    // String st2_name = st2["name"];
+    // int st2_age = st2["age"];
+    // double st2_gpa = st2["gpa"];
     
-    std::cout << "st1 id is : " << st1["id"] << std::endl;
-    std::cout << "st1 name is : " << st1["name"] << std::endl;
-    std::cout << "st1 age is : " << st1["age"] << std::endl;
-    std::cout << "st1 gpa is : " << st1["gpa"] << std::endl;
+    // std::cout << "st1 id is : " << st1["id"] << std::endl;
+    // std::cout << "st1 name is : " << st1["name"] << std::endl;
+    // std::cout << "st1 age is : " << st1["age"] << std::endl;
+    // std::cout << "st1 gpa is : " << st1["gpa"] << std::endl;
     
-    std::cout << std::endl;
+    // std::cout << std::endl;
 
-    std::cout << "st1 id is : " << st2_id << std::endl;
-    std::cout << "st1 name is : " << st2_name << std::endl;
-    std::cout << "st1 age is : " << st2_age << std::endl;
-    std::cout << "st1 gpa is : " << st2_gpa << std::endl;
+    // std::cout << "st1 id is : " << st2_id << std::endl;
+    // std::cout << "st1 name is : " << st2_name << std::endl;
+    // std::cout << "st1 age is : " << st2_age << std::endl;
+    // std::cout << "st1 gpa is : " << st2_gpa << std::endl;
+    Student st1("0001", "Muhammad", 20, 2.3);
+    Student st2("0002", "Solahudeen", 23, 3.5);
+    Student st3("0003", "Roseedee", 24, 4.0);
+
+    StudentList studentlist(10);
+
+    studentlist.add(st1);
+    studentlist.add(st2);
+    studentlist.add(st3);
+
+    Student st4 = studentlist[0];
+    Student& st5 = studentlist[0];
+
+    st4 = st2;
+    studentlist.print();
+
 
     return 0;
 }
