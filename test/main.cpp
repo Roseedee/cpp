@@ -171,13 +171,8 @@ class StudentList {
             current_pos = 0;
         }
 
-        Student& operator[](int index) {
-            if(index > current_pos) throw std::out_of_range("index is over size");
-            return students[index];
-        }
-
-        const Student& operator[](int index) const {
-            if(index > current_pos) throw std::out_of_range("index is over size");
+        Student operator[](int index) const {
+            if(index >= current_pos) throw std::out_of_range("index is over size");
             return students[index];
         }
         
@@ -186,8 +181,13 @@ class StudentList {
             current_pos++;
         }
 
+        void update(int index, const Student& student) {
+            if(index >= current_pos) throw std::out_of_range("index is over size");
+            students[index] = student;
+        }
+
         void remove(size_t index) {
-            if(index > current_pos) throw std::out_of_range("index is over size");
+            if(index >= current_pos) throw std::out_of_range("index is over size");
 
             if(index == current_pos - 1) {
                 students[index] = Student();
@@ -216,7 +216,19 @@ class StudentList {
             return current_pos;
         }
 
-        void print() {
+        size_t find(const String& id) {
+            if(current_pos == 0) throw std::invalid_argument("now list is empty");
+            if(id.isEmpty()) throw std::invalid_argument("id is empty");
+            for(int i = 0; i < current_pos; i++) {
+                String _id = students[i]["id"];
+                if(_id == id) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        void print() const {
             std::cout << "<====== All student list ======>" << std::endl;
             for(int i = 0; i < cap; i++) {
                 // std::cout << i + 1 << ". " << students[i]["id"] << " : " << students[i]["name"] << " : "<< students[i]["age"] << " : " << students[i]["gpa"] << std::endl;
@@ -353,6 +365,7 @@ int main() {
     Student st1("0001", "Muhammad", 20, 2.3);
     Student st2("0002", "Solahudeen", 23, 3.5);
     Student st3("0003", "Roseedee", 24, 4.0);
+    Student st4("0004", "Wanaichoh", 28, 3.8);
 
     StudentList studentlist(10);
 
@@ -360,11 +373,10 @@ int main() {
     studentlist.add(st2);
     studentlist.add(st3);
 
-    Student st4 = studentlist[0];
-    Student& st5 = studentlist[0];
+    studentlist.update(0, st4);
+    int index_find = studentlist.find("0005"); // return -1 when data not found
 
-    st4 = st2;
-    studentlist.print();
+    std::cout << "index of result find : " << index_find << std::endl;
 
 
     return 0;
